@@ -13,7 +13,7 @@ const error = require('./utils/Error');
 
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
-const { PORT = '3000', MONGO_URL = 'mongodb://localhost:27017/bitfilmsdb' } = process.env;
+const { PORT = '3001', MONGO_URL = 'mongodb://localhost:27017/bitfilmsdb' } = process.env;
 
 const app = express();
 
@@ -22,7 +22,7 @@ app.use(helmet());
 app.use(limiter);
 
 app.use(cors({
-  origin: ['http://localhost:3000', 'api.evelina.nomoredomainswork.ru'],
+  origin: ['http://localhost:3001', 'api.evelina.nomoredomainswork.ru'],
   credentials: true,
   maxAge: 60,
 }));
