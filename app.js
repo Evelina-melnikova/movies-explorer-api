@@ -22,7 +22,7 @@ app.use(helmet());
 app.use(limiter);
 
 app.use(cors({
-  origin: ['http://localhost:3000', 'https://evelina.nomoredomainsmonster.ru'],
+  origin: ['http://localhost:3000', 'api.evelina.nomoredomainswork.ru'],
   credentials: true,
   maxAge: 60,
 }));

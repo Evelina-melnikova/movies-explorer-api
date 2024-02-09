@@ -108,7 +108,7 @@ const login = async (req, res, next) => {
 const signout = async (req, res, next) => {
   try {
     res.clearCookie('jwt');
-    res.status(200).send('Вы успешно вышли из системы');
+    res.status(HttpCodes.success).send('Вы успешно вышли из системы');
   } catch (e) {
     next(e);
   }
