@@ -3,7 +3,7 @@
 /* eslint-disable object-property-newline */
 /* eslint-disable max-len */
 // eslint-disable-next-line import/no-unresolved
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 
 const User = require('../models/user');
