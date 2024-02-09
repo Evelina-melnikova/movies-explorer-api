@@ -1,6 +1,6 @@
 const allowedCors = [
-  'https://evelina.nomoredomainsmonster.ru',
-  'http://evelina.nomoredomainsmonster.ru',
+  'https://evelina.nomoredomainswork.ru',
+  'http://evelina.nomoredomainswork.ru',
   'http://localhost:3000',
 
 ];
