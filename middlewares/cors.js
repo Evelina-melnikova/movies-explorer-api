@@ -2,7 +2,6 @@ const allowedCors = [
   'https://evelina.nomoredomainswork.ru',
   'http://evelina.nomoredomainswork.ru',
   'http://localhost:3001',
-
 ];
 
 module.exports = (req, res, next) => {
