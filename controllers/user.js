@@ -12,12 +12,26 @@ const NotFoundError = require('../utils/NotFoundError');
 const usersMe = async (req, res, next) => {
   try {
     const user = await User.findOne({ _id: req.user._id });
-    if (!user) {
-      throw new NotFoundError('Пользователь не найден');
-    }
-    res.status(HttpCodes.success).send(user);
+    res.send(user);
   } catch (e) {
-    next(e);
+    if (e instanceof NotFoundError) {
+      next(new NotFoundError('Пользователь не найден'));
+    } else {
+      next(e);
+    }
+  }
+};
+
+module.exports.getCurrentUser = async (req, res, next) => {
+  try {
+    const currentUser = await User.findOne({ _id: req.user._id });
+    res.send(currentUser);
+  } catch (e) {
+    if (e instanceof NotFoundError) {
+      next(new NotFoundError({ message: 'Пользователь не найден' }));
+    } else {
+      next(e);
+    }
   }
 };
 
