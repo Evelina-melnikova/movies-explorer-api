@@ -4,9 +4,8 @@ const helmet = require('helmet');
 const mongoose = require('mongoose');
 require('dotenv').config();
 const { errors } = require('celebrate');
-const cors = require('cors');
+// const cors = require('cors');
 const limiter = require('./middlewares/rateLimiter');
-
 const { router } = require('./routes/root');
 const { NotFoundError } = require('./utils/NotFoundError');
 const error = require('./utils/Error');
@@ -21,11 +20,11 @@ app.use(helmet());
 
 app.use(limiter);
 
-app.use(cors({
-  origin: ['http://localhost:3000', 'api.evelina.nomoredomainswork.ru'],
-  credentials: true,
-  maxAge: 60,
-}));
+// app.use(cors({
+//   origin: ['http://localhost:3000', 'api.evelina.nomoredomainswork.ru'],
+//   credentials: true,
+//   maxAge: 60,
+// }));
 
 app.use(express.json());
 
@@ -34,7 +33,7 @@ app.use(requestLogger);
 app.use('/', router);
 
 app.use('*', () => {
-  throw new NotFoundError({ message: 'Страница не найдена' });
+  throw new NotFoundError('Страница не найдена');
 });
 
 app.use(errorLogger);
