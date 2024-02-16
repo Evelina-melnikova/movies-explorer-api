@@ -12,7 +12,7 @@ const NotFoundError = require('../utils/NotFoundError');
 const usersMe = async (req, res, next) => {
   try {
     const user = await User.findOne({ _id: req.user._id });
-    res.send(user);
+    res.status(HttpCodes.success).send(user);
   } catch (e) {
     if (e instanceof NotFoundError) {
       next(new NotFoundError('Пользователь не найден'));
@@ -55,7 +55,8 @@ const createUser = async (req, res, next) => {
 const updateUser = async (req, res, next) => {
   try {
     const { name, email } = req.body;
-    const updateUserProfile = await updateUser(req.user._id, { name, email });
+    // Заменяем вызов функции updateUser на вызов функции User.updateUser
+    const updateUserProfile = await User.updateUser(req.user._id, { name, email });
     res.status(HttpCodes.success).send(updateUserProfile);
   } catch (e) {
     if (e instanceof mongoose.Error.ValidationError) {
