@@ -23,7 +23,7 @@ const auth = (req, res, next) => {
       req.user = payload;
       return next();
     } catch (error) {
-      return next(new AuthorizedError({ message: error.message }));
+      return next(new AuthorizedError('С токеном что-то не так'));
     }
   });
 };

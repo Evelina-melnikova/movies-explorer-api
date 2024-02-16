@@ -1,5 +1,3 @@
-/* eslint-disable func-names */
-/* eslint-disable no-console */
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
