@@ -22,19 +22,6 @@ const usersMe = async (req, res, next) => {
   }
 };
 
-module.exports.getCurrentUser = async (req, res, next) => {
-  try {
-    const currentUser = await User.findOne({ _id: req.user._id });
-    res.send(currentUser);
-  } catch (e) {
-    if (e instanceof NotFoundError) {
-      next(new NotFoundError({ message: 'Пользователь не найден' }));
-    } else {
-      next(e);
-    }
-  }
-};
-
 const createUser = async (req, res, next) => {
   try {
     const {
