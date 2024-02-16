@@ -55,18 +55,16 @@ const createUser = async (req, res, next) => {
 const updateUser = async (req, res, next) => {
   try {
     const { name, email } = req.body;
-    // Заменяем вызов функции updateUser на вызов функции User.updateUser
     const updateUserProfile = await User.updateUser(req.user._id, { name, email });
     res.status(HttpCodes.success).send(updateUserProfile);
   } catch (e) {
     if (e instanceof mongoose.Error.ValidationError) {
-      next(new ValidationError('Передан не валидный ID'));
+      next(new ValidationError('Передан невалидный ID'));
     } else {
       next(e);
     }
   }
 };
-
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
