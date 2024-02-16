@@ -4,7 +4,6 @@ const helmet = require('helmet');
 const mongoose = require('mongoose');
 require('dotenv').config();
 const { errors } = require('celebrate');
-// const cors = require('cors');
 const limiter = require('./middlewares/rateLimiter');
 const { router } = require('./routes/root');
 const { NotFoundError } = require('./utils/NotFoundError');
@@ -12,19 +11,13 @@ const error = require('./utils/Error');
 
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
-const { PORT = '3000', MONGO_URL = 'mongodb://localhost:27017/bitfilmsdb' } = process.env;
+const { PORT = '3001', MONGO_URL = 'mongodb://localhost:27017/bitfilmsdb' } = process.env;
 
 const app = express();
 
 app.use(helmet());
 
 app.use(limiter);
-
-// app.use(cors({
-//   origin: ['http://localhost:3000', 'api.evelina.nomoredomainswork.ru'],
-//   credentials: true,
-//   maxAge: 60,
-// }));
 
 app.use(express.json());
 
