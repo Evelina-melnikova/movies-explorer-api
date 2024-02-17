@@ -79,6 +79,7 @@ const login = async (req, res, next) => {
     }
 
     const token = generateToken({ _id: user._id });
+    console.log(token);
     res
       .cookie('jwt', token, {
         httpOnly: true,
