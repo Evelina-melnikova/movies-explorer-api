@@ -72,6 +72,7 @@ const updateUser = async (req, res, next) => {
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
+    console.log(email, password);
     const user = await User.findUserByEmail(email);
     if (!user) {
       throw new NotFoundError('Пользователь не найден');
