@@ -72,7 +72,7 @@ const updateUser = async (req, res, next) => {
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findUserByEmail(email);
+    const user = await User.findUserByCredentials(email, password);
     if (!user) {
       throw new NotFoundError('Пользователь не найден');
     }
@@ -83,7 +83,6 @@ const login = async (req, res, next) => {
     }
 
     const token = generateToken({ _id: user._id });
-    console.log(token);
     res
       .cookie('jwt', token, {
         httpOnly: true,
