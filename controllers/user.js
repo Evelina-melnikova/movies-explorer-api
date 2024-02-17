@@ -40,7 +40,10 @@ const createUser = async (req, res, next) => {
       about,
       avatar,
     });
-    res.status(HttpCodes.create).send(user);
+
+    res
+      .status(HttpCodes.create)
+      .send(user);
   } catch (e) {
     if (e.code === HttpCodes.duplicate) {
       next(new ConflictError('Пользователь уже существует'));
@@ -76,11 +79,12 @@ const login = async (req, res, next) => {
     }
 
     const token = generateToken({ _id: user._id });
-    res.status(HttpCodes.success)
+    res
       .cookie('jwt', token, {
         httpOnly: true,
         sameSite: true,
-      }).send(user.toJSON());
+      })
+      .send(user.toJSON());
   } catch (e) {
     next(e);
   }

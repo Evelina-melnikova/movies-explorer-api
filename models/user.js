@@ -16,6 +16,7 @@ const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
+      required: [true, 'Поле name является обязательным'],
       default: 'Эвелина',
       minlength: [NAME_MIN_LENGTH, `Минимальная длина ${NAME_MIN_LENGTH} символа`],
       maxlength: [NAME_MAX_LENGTH, `Максимальная длина ${NAME_MAX_LENGTH} символов`],
