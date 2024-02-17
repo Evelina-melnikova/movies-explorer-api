@@ -1,30 +1,22 @@
 const jwt = require('jsonwebtoken');
-const cookieParser = require('cookie-parser');
 const { AuthorizedError } = require('../utils/AuthorizedError');
 
 const { NODE_ENV = 'production', JWT_SECRET = 'some-secret-key' } = process.env;
 
-const parseCookie = cookieParser();
-
 const auth = (req, res, next) => {
-  parseCookie(req, res, (err) => {
-    if (err) {
-      return next(new AuthorizedError('Ошибка разбора куки'));
-    }
-    const { jwt: token } = req.cookies;
+  const token = req.cookies.jwt;
 
-    if (!token) {
-      return next(new AuthorizedError('Необходима авторизация'));
-    }
+  if (!token) {
+    next(new AuthorizedError('Необходима авторизация'));
+  }
 
-    try {
-      const payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret');
-      req.user = payload;
-      return next();
-    } catch (error) {
-      return next(new AuthorizedError('С токеном что-то не так'));
-    }
-  });
+  try {
+    const payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret');
+    req.user = payload;
+    next();
+  } catch (error) {
+    next(new AuthorizedError('Неверный токен или истекло время действия'));
+  }
 };
 
 module.exports = auth;
