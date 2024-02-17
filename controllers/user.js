@@ -70,7 +70,6 @@ const updateUser = async (req, res, next) => {
 };
 
 const login = async (req, res, next) => {
-  console.log('саша помоги');
   try {
     const { email, password } = req.body;
     const user = await User.findUserByEmail(email);
@@ -84,6 +83,7 @@ const login = async (req, res, next) => {
     }
 
     const token = generateToken({ _id: user._id });
+    console.log(token);
     res
       .cookie('jwt', token, {
         httpOnly: true,
