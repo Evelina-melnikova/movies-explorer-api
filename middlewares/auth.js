@@ -7,15 +7,15 @@ const auth = (req, res, next) => {
   const token = req.cookies.jwt;
 
   if (!token) {
-    next(new AuthorizedError('Необходима авторизация'));
+    return next(new AuthorizedError('Необходима авторизация'));
   }
 
   try {
     const payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret');
     req.user = payload;
-    next();
+    return next();
   } catch (error) {
-    next(new AuthorizedError('Неверный токен или истекло время действия'));
+    return next(new AuthorizedError('Неверный токен или истекло время действия'));
   }
 };
 

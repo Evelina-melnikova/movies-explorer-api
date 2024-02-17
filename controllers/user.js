@@ -68,18 +68,21 @@ const updateUser = async (req, res, next) => {
     }
   }
 };
+
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findUserByCredentials(email, password);
+    const user = await User.findUserByEmail(email);
+    if (!user) {
+      throw new NotFoundError('Пользователь не найден');
+    }
 
     const matched = await bcrypt.compare(password, user.password);
     if (!matched) {
-      throw new AuthorizedError('Неверно введены данные');
+      throw new AuthorizedError('Неверный пароль');
     }
 
     const token = generateToken({ _id: user._id });
-    console.log(token);
     res
       .cookie('jwt', token, {
         httpOnly: true,
