@@ -70,9 +70,9 @@ const updateUser = async (req, res, next) => {
 };
 
 const login = async (req, res, next) => {
+  console.log(req.body);
   try {
     const { email, password } = req.body;
-    console.log(email, password);
     const user = await User.findUserByEmail(email);
     if (!user) {
       throw new NotFoundError('Пользователь не найден');
@@ -87,7 +87,7 @@ const login = async (req, res, next) => {
     res
       .cookie('jwt', token, {
         httpOnly: true,
-        sameSite: true,
+        sameSite: false,
       })
       .send(user.toJSON());
   } catch (e) {
