@@ -12,7 +12,6 @@ const auth = (req, res, next) => {
       return next(new AuthorizedError('Ошибка разбора куки'));
     }
     const { jwt: token } = req.cookies;
-    console.log(token);
 
     if (!token) {
       return next(new AuthorizedError('Необходима авторизация'));
