@@ -71,8 +71,10 @@ const updateUser = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
-    const user = await User.findUserByCredentials(email, password);
+    const { name, password, email } = req.body;
+    const user = await User.findOne({ email, name }).select('+password').orFail(
+      () => new AuthorizedError('Неверно введены данные'),
+    );
     if (!user) {
       throw new NotFoundError('Пользователь не найден');
     }
@@ -88,7 +90,12 @@ const login = async (req, res, next) => {
         httpOnly: true,
         sameSite: false,
       })
-      .send(user.toJSON());
+      .send({
+        name: user.name,
+        email: user.email,
+        id: user._id,
+        token,
+      });
   } catch (e) {
     next(e);
   }
