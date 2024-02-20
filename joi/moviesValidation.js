@@ -1,11 +1,9 @@
 const { Joi, celebrate } = require('celebrate');
 const { regexUrl } = require('../utils/Regex');
 
-const idSchema = Joi.string().required().alphanum().length(24);
-
 const movieIdValidation = celebrate({
   params: Joi.object().keys({
-    id: idSchema,
+    _id: Joi.string().hex().length(24).required(),
   }),
 });
 

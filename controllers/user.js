@@ -1,5 +1,6 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
+const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 const HttpCodes = require('../constants/constants');
 const generateToken = require('../utils/Token');
@@ -25,11 +26,9 @@ const usersMe = async (req, res, next) => {
 const createUser = async (req, res, next) => {
   try {
     const {
-      name,
-      about,
-      avatar,
       email,
       password,
+      name,
     } = req.body;
 
     const hash = await bcrypt.hash(password, 10);
@@ -37,18 +36,20 @@ const createUser = async (req, res, next) => {
       email,
       password: hash,
       name,
-      about,
-      avatar,
     });
 
     res
       .status(HttpCodes.create)
-      .send(user);
+      .send({
+        name: user.name,
+        email: user.email,
+        id: user._id,
+      });
   } catch (e) {
     if (e.code === HttpCodes.duplicate) {
       next(new ConflictError('Пользователь уже существует'));
     } else if (e instanceof mongoose.Error.ValidationError) {
-      next(new ValidationError('Передан не валидный ID'));
+      next(new ValidationError('Передан невалидный ID'));
     } else {
       next(e);
     }
@@ -58,7 +59,7 @@ const createUser = async (req, res, next) => {
 const updateUser = async (req, res, next) => {
   try {
     const { name, email } = req.body;
-    const updateUserProfile = await User.updateUser(req.user._id, { name, email });
+    const updateUserProfile = await User.findByIdAndUpdate(req.user._id, { name, email });
     res.status(HttpCodes.success).send(updateUserProfile);
   } catch (e) {
     if (e instanceof mongoose.Error.ValidationError) {

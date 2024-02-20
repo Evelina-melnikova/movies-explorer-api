@@ -1,80 +1,71 @@
 const mongoose = require('mongoose');
-const { Regex } = require('../utils/Regex');
+const { regexUrl } = require('../utils/Regex');
 
-const ERROR_MESSAGES = {
-  REQUIRED: (field) => `Поле ${field} является обязательным`,
-  NOT_LINK: (field) => `${field} не является ссылкой!`,
-};
-
-const linkValidator = {
-  validator(v) {
-    return Regex.test(v);
+const movieSchema = new mongoose.Schema(
+  {
+    country: {
+      type: String,
+      required: [true, 'Поле "country" обязательно для заполнения'],
+    },
+    director: {
+      type: String,
+      required: [true, 'Поле "director" обязательно для заполнения'],
+    },
+    duration: {
+      type: Number,
+      required: [true, 'Поле "duration" обязательно для заполнения'],
+    },
+    year: {
+      type: String,
+      required: [true, 'Поле "year" обязательно для заполнения'],
+    },
+    description: {
+      type: String,
+      required: [true, 'Поле "description" обязательно для заполнения'],
+    },
+    image: {
+      type: String,
+      required: [true, 'Поле "image" обязательно для заполнения'],
+      validate: {
+        validator: (url) => regexUrl.test(url),
+        message: 'Введен некорректный адрес ссылки',
+      },
+    },
+    trailerLink: {
+      type: String,
+      required: [true, 'Поле "trailerLink" обязательно для заполнения'],
+      validate: {
+        validator: (url) => regexUrl.test(url),
+        message: 'Введен некорректный адрес ссылки',
+      },
+    },
+    thumbnail: {
+      type: String,
+      required: [true, 'Поле "thumbnail" обязательно для заполнения'],
+      validate: {
+        validator: (url) => regexUrl.test(url),
+        message: 'Введен некорректный адрес ссылки',
+      },
+    },
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'user',
+      required: [true, 'Поле "owner" обязательно для заполнения'],
+    },
+    movieId: {
+      type: Number,
+      required: [true, 'Поле "movieId" обязательно для заполнения'],
+    },
+    nameRU: {
+      type: String,
+      required: [true, 'Поле "nameRU" обязательно для заполнения'],
+    },
+    nameEN: {
+      type: String,
+      required: [true, 'Поле "nameEN" обязательно для заполнения'],
+    },
   },
-  message: (props) => ERROR_MESSAGES.NOT_LINK(props.value),
-};
-
-const requiredValidator = (field) => ({
-  required: {
-    value: true,
-    message: ERROR_MESSAGES.REQUIRED(field),
-  },
-});
-
-const movieFields = {
-  country: {
-    type: String,
-    ...requiredValidator('country'),
-  },
-  director: {
-    type: String,
-    ...requiredValidator('director'),
-  },
-  duration: {
-    type: Number,
-    ...requiredValidator('duration'),
-  },
-  year: {
-    type: String,
-    ...requiredValidator('year'),
-  },
-  description: {
-    type: String,
-    ...requiredValidator('description'),
-  },
-  image: {
-    type: String,
-    ...requiredValidator('image'),
-    validate: linkValidator,
-  },
-  trailerLink: {
-    type: String,
-    ...requiredValidator('trailerLink'),
-    validate: linkValidator,
-  },
-  thumbnail: {
-    type: String,
-    ...requiredValidator('thumbnail'),
-    validate: linkValidator,
-  },
-  owner: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'user',
-    ...requiredValidator('owner'),
-  },
-  movieId: {
-    type: Number,
-    ...requiredValidator('movieId'),
-  },
-  nameRU: {
-    type: String,
-    ...requiredValidator('nameRU'),
-  },
-  nameEN: {
-    type: String,
-    ...requiredValidator('nameEN'),
-  },
-};
-
-const movieSchema = new mongoose.Schema(movieFields);
+  { versionKey: false, timestamps: true },
+);
 
 module.exports = mongoose.model('movie', movieSchema);

@@ -1,76 +1,30 @@
-/* eslint-disable no-console */
-/* eslint-disable func-names */
 const mongoose = require('mongoose');
-const validator = require('validator');
-const bcrypt = require('bcryptjs');
-const { AuthorizedError } = require('../utils/AuthorizedError');
-
-const ERROR_MESSAGES = {
-  UNAUTHORIZED: 'Неправильные почта или пароль',
-};
-
-const NAME_MIN_LENGTH = 2;
-const NAME_MAX_LENGTH = 30;
+const { regexEmail } = require('../utils/Regex');
 
 const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, 'Поле name является обязательным'],
-      default: 'Эвелина',
-      minlength: [NAME_MIN_LENGTH, `Минимальная длина ${NAME_MIN_LENGTH} символа`],
-      maxlength: [NAME_MAX_LENGTH, `Максимальная длина ${NAME_MAX_LENGTH} символов`],
+      required: true,
+      minlength: [2, 'Минимальная длина поля - 2'],
+      maxlength: [30, 'Максимальная длина поля - 30'],
     },
     email: {
       type: String,
-      required: [true, 'Поле email является обязательным'],
+      required: [true, 'Поле "email" должно быть заполнено'],
       unique: true,
       validate: {
-        validator: validator.isEmail,
-        message: 'Некорректный формат email',
+        validator: (email) => regexEmail.test(email),
+        message: 'Введен некорректный адрес электронной почты',
       },
     },
     password: {
       type: String,
-      required: [true, 'Поле password является обязательным'],
+      required: [true, 'Поле "password" должно быть заполнено'],
       select: false,
     },
   },
-  {
-    versionKey: false,
-    timestamps: true,
-    toJSON: {
-      transform(doc, ret) {
-        const { password, ...userWithoutPassword } = ret;
-        return userWithoutPassword;
-      },
-    },
-  },
+  { versionKey: false, timestamps: true },
 );
-
-userSchema.statics.findUserByEmail = async function (email) {
-  return this.findOne({ email });
-};
-
-userSchema.methods.comparePassword = async function (password) {
-  try {
-    return await bcrypt.compare(password, this.password);
-  } catch (error) {
-    console.error('Ошибка сравнения пароля:', error);
-    throw new AuthorizedError(ERROR_MESSAGES.UNAUTHORIZED);
-  }
-};
-
-userSchema.statics.authenticate = async function (email, password) {
-  const user = await this.findUserByEmail(email);
-  if (!user) {
-    throw new AuthorizedError(ERROR_MESSAGES.UNAUTHORIZED);
-  }
-  const passwordMatched = await user.comparePassword(password);
-  if (!passwordMatched) {
-    throw new AuthorizedError(ERROR_MESSAGES.UNAUTHORIZED);
-  }
-  return user;
-};
 
 module.exports = mongoose.model('user', userSchema);

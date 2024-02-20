@@ -1,26 +1,21 @@
 const jwt = require('jsonwebtoken');
-const cookieParser = require('cookie-parser');
-const { AuthorizedError } = require('../utils/AuthorizedError');
+const AuthorizedError = require('../utils/AuthorizedError');
+require('dotenv').config();
 
-const { NODE_ENV = 'production', JWT_SECRET = 'some-secret-key' } = process.env;
-const parseCookie = cookieParser();
-
-const auth = (req, res, next) => {
-  module.exports = auth;
-  parseCookie(req, res, () => {
-    const { jwt: token } = req.cookies;
+const { JWT_SECRET, NODE_ENV } = process.env;
+// eslint-disable-next-line func-names, consistent-return
+module.exports = function (req, res, next) {
+  let payload;
+  try {
+    const token = req.headers.authorization;
     if (!token) {
-      next(new AuthorizedError('Необходима авторизация'));
-    } else {
-      let payload;
-      try {
-        payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret');
-      } catch (e) {
-        next(new AuthorizedError('Неверный токен или истекло время действия'));
-      }
-      req.user = payload;
-      next();
+      throw new AuthorizedError('Необходима авторизация');
     }
-  });
+    const validToken = token.replace('Bearer ', '');
+    payload = jwt.verify(validToken, NODE_ENV !== 'production' ? 'jwt_secret' : JWT_SECRET);
+  } catch (e) {
+    return next(new AuthorizedError('С токеном что-то не так'));
+  }
+  req.user = payload;
+  next();
 };
-module.exports = auth;
