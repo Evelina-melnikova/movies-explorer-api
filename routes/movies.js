@@ -1,5 +1,4 @@
 const movieRouter = require('express').Router();
-// const { celebrate } = require('celebrate');
 
 const { getMovies, createMovie, deleteMovieById } = require('../controllers/movies');
 const { movieIdValidation, movieDataValidation } = require('../joi/moviesValidation');
