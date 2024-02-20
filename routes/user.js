@@ -1,5 +1,4 @@
 const userRouter = require('express').Router();
-// const { celebrate } = require('celebrate');
 
 const { usersMe, updateUser } = require('../controllers/user');
 const { userValidation } = require('../joi/userValidation');
