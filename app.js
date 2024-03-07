@@ -37,9 +37,9 @@ app.use(errors());
 
 mongoose.connect(MONGO_URL);
 
-mongoose.connection.on('error', (error) => {
-  console.error('MongoDB connection error:', error);
-});
+// mongoose.connection.on('error', (error) => {
+//   console.error('MongoDB connection error:', error);
+// });
 
 mongoose.connection.once('open', () => {
   app.listen(PORT, () => {
