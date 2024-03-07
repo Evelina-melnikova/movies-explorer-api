@@ -5,9 +5,9 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 const { errors } = require('celebrate');
 const limiter = require('./middlewares/rateLimiter');
-const router = require('./routes/root');
+// const router = require('./routes/index');
 const NotFoundError = require('./utils/NotFoundError');
-const error = require('./utils/Error');
+// const error = require('./utils/Error');
 
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
@@ -23,7 +23,7 @@ app.use(express.json());
 
 app.use(requestLogger);
 
-app.use('/', router);
+// app.use('/', router);
 
 app.use('*', () => {
   throw new NotFoundError('Страница не найдена');
@@ -33,7 +33,7 @@ app.use(errorLogger);
 
 app.use(errors());
 
-app.use(error);
+// app.use(error);
 
 mongoose.connect(MONGO_URL);
 
