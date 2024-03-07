@@ -7,7 +7,7 @@ const { errors } = require('celebrate');
 const limiter = require('./middlewares/rateLimiter');
 const router = require('./routes/index');
 const NotFoundError = require('./utils/NotFoundError');
-// const error = require('./utils/Error');
+const error = require('./utils/Error');
 
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
@@ -33,12 +33,12 @@ app.use(errorLogger);
 
 app.use(errors());
 
-// app.use(error);
+app.use(error);
 
 mongoose.connect(MONGO_URL);
 
-mongoose.connection.on('error', (error) => {
-  console.error('MongoDB connection error:', error);
+mongoose.connection.on('error', (err) => {
+  console.error('MongoDB connection error:', err);
 });
 
 mongoose.connection.once('open', () => {
