@@ -6,4 +6,4 @@ const { userValidation } = require('../joi/userValidation');
 userRouter.get('/me', usersMe);
 userRouter.patch('/me', userValidation, updateUser);
 
-module.exports = userRouter;
+module.exports = { userRouter };
