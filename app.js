@@ -11,7 +11,7 @@ const NotFoundError = require('./utils/NotFoundError');
 
 // const { requestLogger, errorLogger } = require('./middlewares/logger');
 
-const { PORT = '3001', MONGO_URL = 'mongodb://127.0.0.1:27017/bitfilmsdb' } = process.env;
+const { PORT = '3000', MONGO_URL = 'mongodb://127.0.0.1:27017/bitfilmsdb' } = process.env;
 
 const app = express();
 
