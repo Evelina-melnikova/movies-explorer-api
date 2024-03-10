@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 const { errors } = require('celebrate');
 const limiter = require('./middlewares/rateLimiter');
-const router = require('./routes/index');
+const router = require('./routes/root');
 const NotFoundError = require('./utils/NotFoundError');
 const error = require('./utils/Error');
 
